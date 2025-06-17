@@ -69,20 +69,26 @@ async def get_resources():
 
 @app.post("/resources", response_model=Resource)
 async def create_resource(resource: NewResource):
+    print("Received new resource:", resource)
     query = """
         INSERT INTO resources (name, role, availability, available_from, available_to, status)
         VALUES ($1, $2, $3, $4, $5, $6)
         RETURNING *
     """
-    row = await app.state.db.fetchrow(query,
-        resource.name,
-        resource.role,
-        resource.availability,
-        resource.available_from,
-        resource.available_to,
-        resource.status
-    )
-    return dict(row)
+    try:
+        row = await app.state.db.fetchrow(query,
+            resource.name,
+            resource.role,
+            resource.availability,
+            resource.available_from,
+            resource.available_to,
+            resource.status
+        )
+        print("Inserted row:", row)
+        return dict(row)
+    except Exception as e:
+        print("Insert failed:", e)
+        raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/projects", response_model=List[Project])
 async def get_projects():
