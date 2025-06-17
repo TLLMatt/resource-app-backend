@@ -105,6 +105,17 @@ async def create_project(project: NewProject):
     row = await app.state.db.fetchrow(query, project.name, project.start_date, project.end_date, project.status)
     return dict(row)
 
+# Ping route to check database connectivity
+@app.get("/ping")
+async def ping():
+    try:
+        conn = await app.state.db.acquire()
+        version = await conn.fetchval("SELECT version();")
+        await app.state.db.release(conn)
+        return {"status": "ok", "db_version": version}
+    except Exception as e:
+        return {"status": "error", "detail": str(e)}
+
 # Entry point
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
