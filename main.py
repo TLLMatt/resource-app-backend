@@ -6,6 +6,7 @@ from typing import List
 import asyncpg
 import os
 import uvicorn
+from datetime import date
 
 app = FastAPI()
 
