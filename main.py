@@ -12,11 +12,14 @@ app = FastAPI()
 # CORS settings
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "https://resource-app-frontend.vercel.app"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 # Supabase PostgreSQL connection
 DATABASE_URL = "postgresql://postgres:TechLabsMatt31?!@db.dzifhyukbvkibarpthtj.supabase.co:5432/postgres"
