@@ -20,7 +20,7 @@ app.add_middleware(
 )
 
 # Supabase PostgreSQL connection
-DATABASE_URL = "postgresql://postgres:[YOUR_PASSWORD]@db.dzifhyukbvkibarpthtj.supabase.co:5432/postgres"
+DATABASE_URL = "postgresql://postgres:TechLabsM@31?!@db.dzifhyukbvkibarpthtj.supabase.co:5432/postgres"
 
 @app.on_event("startup")
 async def startup():
