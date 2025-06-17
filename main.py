@@ -35,13 +35,18 @@ class Resource(BaseModel):
     name: str
     role: str
     availability: str
+    available_from: date
+    available_to: date
     status: str
 
 class NewResource(BaseModel):
     name: str
     role: str
     availability: str
+    available_from: date
+    available_to: date
     status: str
+
 
 class Project(BaseModel):
     id: int
@@ -65,12 +70,20 @@ async def get_resources():
 @app.post("/resources", response_model=Resource)
 async def create_resource(resource: NewResource):
     query = """
-        INSERT INTO resources (name, role, availability, status)
-        VALUES ($1, $2, $3, $4)
+        INSERT INTO resources (name, role, availability, available_from, available_to, status)
+        VALUES ($1, $2, $3, $4, $5, $6)
         RETURNING *
     """
-    row = await app.state.db.fetchrow(query, resource.name, resource.role, resource.availability, resource.status)
+    row = await app.state.db.fetchrow(query,
+        resource.name,
+        resource.role,
+        resource.availability,
+        resource.available_from,
+        resource.available_to,
+        resource.status
+    )
     return dict(row)
+
 
 @app.get("/projects", response_model=List[Project])
 async def get_projects():
