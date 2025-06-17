@@ -6,24 +6,21 @@ from typing import List
 import asyncpg
 import os
 import uvicorn
-from datetime import date
+from datetime import date  # added for date fields
 
 app = FastAPI()
 
 # CORS settings
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "https://resource-app-frontend.vercel.app"
-    ],
+    allow_origins=["https://resource-app-frontend.vercel.app"],  # allow specific frontend
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-
 # Supabase PostgreSQL connection
-DATABASE_URL = "postgresql://postgres:TechLabsMatt31?!@db.dzifhyukbvkibarpthtj.supabase.co:5432/postgres"
+DATABASE_URL = "postgresql://postgres:[YOUR_PASSWORD]@db.dzifhyukbvkibarpthtj.supabase.co:5432/postgres"
 
 @app.on_event("startup")
 async def startup():
@@ -50,7 +47,6 @@ class NewResource(BaseModel):
     available_from: date
     available_to: date
     status: str
-
 
 class Project(BaseModel):
     id: int
@@ -87,7 +83,6 @@ async def create_resource(resource: NewResource):
         resource.status
     )
     return dict(row)
-
 
 @app.get("/projects", response_model=List[Project])
 async def get_projects():
