@@ -7,6 +7,7 @@ import asyncpg
 import os
 import uvicorn
 from datetime import date  # added for date fields
+import socket  # for host reachability check
 
 app = FastAPI()
 
@@ -115,6 +116,16 @@ async def ping():
         return {"status": "ok", "db_version": version}
     except Exception as e:
         return {"status": "error", "detail": str(e)}
+
+# Direct host reachability test (no DB call)
+@app.get("/host-check")
+def host_check():
+    try:
+        host = "db.dzifhyukbvkibarpthtj.supabase.co"
+        socket.gethostbyname(host)
+        return {"host": host, "reachable": True}
+    except Exception as e:
+        return {"host": host, "reachable": False, "error": str(e)}
 
 # Entry point
 if __name__ == "__main__":
